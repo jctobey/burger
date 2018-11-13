@@ -14,11 +14,11 @@
   {{/each}}
 </table>
 
-<table class="col-2">
+<table class="col-6">
   <tr>
   {{#each burgers}}
     {{#if devoured}}
-     <td class="burger-devour">{{this.burger_name}}</td></tr>
+     <td class="burger-devour">{{this.burger_name}}</td><td><button class="btn btn-warning restore-burger" data-id="{{this.id}}">I'm still hungry!</button></td></tr>
     {{/if}}
   {{/each}}
 </table></div>
@@ -66,6 +66,28 @@ $(".create-form").on("submit", function(event) {
   
       var newBurgerState = {
         devoured: true
+      };
+  
+      // Send the PUT request.
+      $.ajax("/api/burgers/" + id, {
+        type: "PUT",
+        data: newBurgerState
+      }).then(
+        function() {
+          console.log("changed burger to", newBurger);
+          // Reload the page to get the updated list
+          location.reload();
+        }
+      );
+    });
+  })
+   $(function() {
+    $(".restore-burger").on("click", function(event) {
+      var id = $(this).data("id");
+      var newBurger = $(this).data("newburger");
+  
+      var newBurgerState = {
+        devoured: false
       };
   
       // Send the PUT request.
